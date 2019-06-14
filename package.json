@@ -45,7 +45,7 @@
   },
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "git@github.com:ewise-systems/aegisJS-core.git"
   },
   "files": [
     "fpcore",
