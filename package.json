@@ -48,6 +48,7 @@
     "url": "git@github.com:ewise-systems/aegisJS-core.git"
   },
   "files": [
+    "constants.json",
     "fpcore",
     "frpcore",
     "hof",
