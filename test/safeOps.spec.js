@@ -13,7 +13,7 @@ const {
     safeIsWebUri,
     safeMakeWebUrl,
     safeGetAegisUrl
-} = require("../lib/fpcore/safeOps");
+} = require("../fpcore/safeOps");
 const { compose } = require("ramda");
 
 const runSafeOpsTestSuite = args => {

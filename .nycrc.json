@@ -3,8 +3,10 @@
     ".js"
   ],
   "include": [
-    "**/lib/**/*.js",
-    "**/src/*.js"
+    "fpcore/*.js",
+    "frpcore/*.js",
+    "hof/*.js",
+    "hos/*.js"
   ],
   "reporter": [
     "html"

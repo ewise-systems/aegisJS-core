@@ -1,5 +1,2 @@
 node_modules/*
-srv/*
-samples/*
-dist/*
 coverage/*
