@@ -19,6 +19,13 @@ const safeNth = x =>
         throw Error("Array was not provided as input");
     });
 
+// safeASCIIToBase64 :: a -> Result(Error, Buffer a)
+const safeASCIIToBase64 = x => Result.try(_ => {
+    if(isString(x))
+        return Buffer.from(x).toString("base64");
+    throw Error(x);
+});
+
 // safeBase64ToBuffer :: a -> Result(Error, Buffer a)
 const safeBase64ToBuffer = x => Result.try(_ => {
     if(isString(x))
@@ -60,6 +67,7 @@ const safeGetAegisUrl = x =>
 module.exports = {
     safeSplit,
     safeNth,
+    safeASCIIToBase64,
     safeBase64ToBuffer,
     safeJsonParse,
     safeIsWebUri,

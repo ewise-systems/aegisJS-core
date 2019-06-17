@@ -5,6 +5,11 @@ const addProp = curry((obj, key, value) =>
     ({ ...obj, [key]: value })
 );
 
+// appendProp :: a -> b -> {a: c} -> {a: b, a: c}
+const appendProp = curry((key, value, obj) =>
+    ({ ...obj, [key]: value })
+);
+
 // either :: (a -> c) -> (b -> c) -> Either a b -> c
 const either = curry((f, g, e) =>
     e.matchWith({
@@ -18,6 +23,7 @@ const toNull = _ => null;
 
 module.exports = {
     addProp,
+    appendProp,
     either,
     toNull
 };

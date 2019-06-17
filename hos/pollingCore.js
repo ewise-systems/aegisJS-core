@@ -2,7 +2,7 @@ const { curry, equals, nth } = require("ramda");
 const { interval, of } = require("rxjs");
 const { bufferCount, catchError, take, takeWhile, filter, map, flatMap } = require("rxjs/operators");
 
-const POLL_INTERVAL = 500; //ms
+const POLL_INTERVAL = 200; //ms
 
 // poller$ :: (_ -> Stream x) -> Stream x
 const poller$ = streamFactory =>
@@ -12,7 +12,7 @@ const poller$ = streamFactory =>
         bufferCount(2, 1),
         filter(([a, b]) => !equals(a, b)),
         map(nth(1)),
-        catchError(x => of(x))
+        catchError(x => of(x)),
     );
 
 // kickstart$ :: (a -> boolean) -> (_ -> Stream x) -> (_ -> Stream x) -> Stream x
@@ -20,7 +20,7 @@ const kickstart$ = curry((pred, iStream, hStream) =>
     iStream()
     .pipe(
         take(1),
-        flatMap(({processId: pid}) => poller$(hStream(pid))),
+        flatMap(({processId: pid}) => poller$(() => hStream(pid))),
         takeWhile(pred, true),
         catchError(x => of(x))
     )

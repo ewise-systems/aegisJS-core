@@ -1,10 +1,9 @@
-const { from } = require("rxjs");
-const { requestToAegis } = require("../hof/requestToAegis");
+const { BehaviorSubject, from } = require("rxjs");
 
 // toObservable :: string -> string -> string -> string -> Stream x
-const toObservable = (method, jwt, body, path) => () =>
+const toObservable = task =>
     from(
-        requestToAegis(method, jwt, body, path)(jwt)
+        task
         .run()
         .promise()
     );

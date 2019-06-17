@@ -8,6 +8,7 @@ const { expect } = require("chai");
 const {
     safeSplit,
     safeNth,
+    safeASCIIToBase64,
     safeBase64ToBuffer,
     safeJsonParse,
     safeIsWebUri,
@@ -77,6 +78,16 @@ const runSafeOpsTestSuite = args => {
 runSafeOpsTestSuite({ cut: safeSplit, types: { out: Array } });
 
 runSafeOpsTestSuite({ cut: safeNth, types: { inp: Array } });
+
+runSafeOpsTestSuite({ cut: safeASCIIToBase64, manual: {
+    desc: "should convert string to base64",
+    tests: [
+        {
+            inp: "test",
+            out: "dGVzdA=="
+        }
+    ]
+}});
 
 runSafeOpsTestSuite({ cut: safeBase64ToBuffer, types: { out: Buffer } });
 
