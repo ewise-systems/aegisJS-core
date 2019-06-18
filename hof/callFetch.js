@@ -7,10 +7,10 @@ const { addProp, appendProp } = require("../fpcore/pointfree");
 const { safeASCIIToBase64 } = require("../fpcore/safeOps");
 
 // sendRequest :: string -> {method: string} -> {token: string} -> {data: {k: v}} -> Task a b
-const sendRequest = curry((url, method, token, data) =>
+const sendRequest = curry((url, method, headers, data) =>
     task(({reject, resolve}) =>
         axios({
-            url, ...method, headers: { ...token },  ...data
+            url, ...method, headers: { ...headers },  ...data
         })
         .then(compose(resolve, prop("data")))
         .catch(compose(reject, prop("data"), prop("response")))
