@@ -21,8 +21,8 @@ const requestToAegisOTA = curry((method, xheaders, body, path) =>
 );
 
 // requestToAegisWithToken :: { method :: string, jwt :: JWT string, body :: JSON string, path :: URLPath string } -> Task a b
-const requestToAegisWithToken = ({method, jwt, body, path, tokenOrUrl}) =>
-    requestToAegis(method, jwt, body, path)(tokenOrUrl);
+const requestToAegisWithToken = (method, jwt, body, path, url) =>
+    requestToAegis(method, jwt, body, path)(jwt || url);
 
 module.exports = {
     requestToAegis,

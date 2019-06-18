@@ -45,7 +45,7 @@ const safeJsonParse = x =>
 const safeIsWebUri = x =>
     Result.try(_ => {
         if(isString(x))
-            return isWebUri(x);
+            return isWebUri(x) ? true : false;
         throw Error("String not provided as an input");
     });
 
