@@ -2,18 +2,18 @@ const axios = require("axios");
 const Maybe = require("folktale/maybe");
 const { compose, concat, curry, toString, prop, replace } = require("ramda");
 const { task } = require("folktale/concurrency/task");
-const { liftA3m } = require("../fpcore/liftA");
+const { liftA4m } = require("../fpcore/liftA");
 const { addProp, appendProp } = require("../fpcore/pointfree");
 const { safeASCIIToBase64 } = require("../fpcore/safeOps");
 
 // sendRequest :: string -> {method: string} -> {token: string} -> {data: {k: v}} -> Task a b
-const sendRequest = curry((url, method, headers, data) =>
+const sendRequest = curry((url, method, headers, data, timeout) =>
     task(({reject, resolve}) =>
         axios({
-            url, ...method, headers: { ...headers },  ...data
+            url, ...method, headers: { ...headers },  ...data, ...timeout
         })
         .then(compose(resolve, prop("data")))
-        .catch(compose(reject, prop("data"), prop("response")))
+        .catch(compose(reject, prop("code")))
     )
 );
 
@@ -58,25 +58,34 @@ const addData = curry((data, obj) =>
     .getOrElse({})
 );
 
+const addTimeout = curry((timeout, obj) =>
+    Maybe
+    .Just(timeout)
+    .map(addProp(obj, "timeout"))
+    .getOrElse({})
+);
+
 // callFetch :: string -> string -> {k: v} -> string -> Task a b
-const callFetch = curry((method, token, data, url) =>
-    liftA3m(
+const callFetch = curry((method, token, data, timeout, url) =>
+    liftA4m(
         sendRequest(url),
         addMethod(method),
         addAuthHeader(token),
         addData(data),
+        addTimeout(timeout),
         Maybe.Just({})
     )
     .getOrElse(null)
 );
 
 // callFetchOTA :: string -> { appId :: String, appSecret :: String, uname :: String, email :: String } -> {k: v} -> string -> Task a b
-const callXFetch = curry((method, xheaders, data, url) =>
-    liftA3m(
+const callXFetch = curry((method, xheaders, data, timeout, url) =>
+    liftA4m(
         sendRequest(url),
         addMethod(method),
         addOTAHeader(xheaders),
         addData(data),
+        addTimeout(timeout),
         Maybe.Just({})
     )
     .getOrElse(null)

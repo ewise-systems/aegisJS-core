@@ -1,9 +1,9 @@
 const { curry, equals, nth } = require("ramda");
-const { of } = require("rxjs");
-const { expand, bufferCount, catchError, take, takeWhile, filter, map } = require("rxjs/operators");
+const { timer, throwError } = require("rxjs");
+const { expand, bufferCount, take, takeWhile, retryWhen, mergeMap, filter, map } = require("rxjs/operators");
 
 // kickstart$ :: (a -> boolean) -> (_ -> Stream x) -> (_ -> Stream x) -> Stream x
-const kickstart$ = curry((pred, iStream, hStream) =>
+const kickstart$ = curry((retryLimit, retryDelay, pred, iStream, hStream) =>
     iStream()
     .pipe(
         take(1),
@@ -11,8 +11,14 @@ const kickstart$ = curry((pred, iStream, hStream) =>
         bufferCount(2, 1),
         filter(([a, b]) => !equals(a, b)),
         map(nth(1)),
-        takeWhile(pred, true),
-        catchError(x => of(x))
+        retryWhen(err$ =>
+            err$.pipe(
+                mergeMap((err, i) =>
+                    i > retryLimit ? throwError(err) : timer(retryDelay)
+                )
+            )
+        ),
+        takeWhile(pred, true)
     )
 );
 
