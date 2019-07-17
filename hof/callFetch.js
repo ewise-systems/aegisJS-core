@@ -27,8 +27,11 @@ const addMethod = curry((method, obj) =>
 
 // addAuthHeader :: string -> {j: u} -> {token: string}
 const addAuthHeader = curry((token, obj) =>
-    Maybe
-    .Just(token)
+    (() =>
+        token ?
+        Maybe.Just(token) :
+        Maybe.Nothing()
+    )()
     .map(toString)
     .map(replace(/\"/g, ""))
     .map(concat("Bearer "))

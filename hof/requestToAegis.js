@@ -1,17 +1,12 @@
 const { curry, chain, pipe } = require("ramda");
-const { rejected } = require("folktale/concurrency/task");
 const { getUrl } = require("./getUrl");
 const { callFetch, callXFetch } = require("./callFetch");
-const { either } = require("../fpcore/pointfree");
 
 // requestToAegis :: string -> JWT string -> JSON string -> URLPath string -> Task a b
 const requestToAegis = curry((method, jwt, body, timeout, path) =>
     pipe(
         getUrl(path),
-        either(
-            rejected,
-            chain(callFetch(method, jwt, body, timeout))
-        )
+        chain(callFetch(method, jwt, body, timeout))
     )
 );
 
@@ -21,7 +16,7 @@ const requestToAegisOTA = curry((method, xheaders, body, timeout, path) =>
 );
 
 // requestToAegisWithToken :: { method :: string, jwt :: JWT string, body :: JSON string, path :: URLPath string } -> Task a b
-const requestToAegisWithToken = (method, jwt, body, path, timeout, url) =>
+const requestToAegisWithToken = (method, jwt, body, timeout, path, url) =>
     requestToAegis(method, jwt, body, timeout, path)(jwt || url);
 
 // requestToAegisServerWithToken :: { method :: string, jwt :: JWT string, body :: JSON string, path :: URLPath string } -> Task a b
