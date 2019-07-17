@@ -13,17 +13,25 @@ const appendProp = curry((key, value, obj) =>
 // either :: (a -> c) -> (b -> c) -> Either a b -> c
 const either = curry((f, g, e) =>
     e.matchWith({
-        Error: x => f(x),
-        Ok: x => g(x)
+        Error: x => console.log(101, x) || f(x),
+        Ok: x => console.log(102, x) || g(x)
     })
 );
 
 // toNull :: _ -> null
 const toNull = _ => null;
 
+// id :: a -> a
+const id = a => a;
+
+// getOrElseNull :: Folktale/Result a -> ?(a)
+const getOrElseNull = a => a.getOrElse(null);
+
 module.exports = {
     addProp,
     appendProp,
     either,
-    toNull
+    toNull,
+    id,
+    getOrElseNull
 };

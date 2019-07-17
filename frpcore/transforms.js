@@ -1,7 +1,7 @@
 const { from } = require("rxjs");
 
 // toObservable :: string -> string -> string -> string -> Stream x
-const toObservable = task =>
+const taskToObservable = task =>
     from(
         task
         .run()
@@ -9,5 +9,5 @@ const toObservable = task =>
     );
 
 module.exports = {
-    toObservable
+    taskToObservable
 };
