@@ -14,7 +14,10 @@ const kickstart$ = curry((retryLimit, retryDelay, pred, iStream, hStream) =>
         retryWhen(err$ =>
             err$.pipe(
                 mergeMap((err, i) =>
-                    i > retryLimit ? throwError(err) : timer(retryDelay)
+                    i > retryLimit ||
+                    err === 500 ?
+                    throwError(err) :
+                    timer(retryDelay)
                 )
             )
         ),

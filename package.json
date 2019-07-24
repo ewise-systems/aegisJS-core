@@ -1,6 +1,6 @@
 {
   "name": "@ewise/aegisjs-core",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Core pure functions for the open source library for interacting with eWise Systems' Aegis 2.0 architecture",
   "main": "main.js",
   "scripts": {
