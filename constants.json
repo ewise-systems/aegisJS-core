@@ -3,8 +3,7 @@
         "type": "object",
         "properties": {
             "iss": {
-                "type": "string",
-                "format": "uri"
+                "type": "string"
             },
             "aegis": {
                 "type": "string",
@@ -14,8 +13,7 @@
                 "type": "string"
             },
             "origins": {
-                "type": "string",
-                "format": "uri"
+                "type": "string"
             },
             "sub": {
                 "type": "string"
