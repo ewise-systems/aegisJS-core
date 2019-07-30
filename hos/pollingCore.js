@@ -1,6 +1,6 @@
 const { curry, equals, nth } = require("ramda");
 const { timer, throwError , of} = require("rxjs");
-const { expand, bufferCount, take, takeWhile, retryWhen, mergeMap, filter, map, flatMap, catchError, delay } = require("rxjs/operators");
+const { expand, bufferCount, take, takeWhile, retryWhen, mergeMap, filter, map, flatMap, catchError } = require("rxjs/operators");
 
 // createRecursivePollStream$ :: (a -> boolean) -> (_ -> Stream x) -> (_ -> Stream x) -> Stream x
 const createRecursivePollWithRetryStream = curry((retryLimit, retryDelay, pred, iStream, hStream) =>
