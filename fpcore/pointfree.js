@@ -1,4 +1,4 @@
-const { curry } = require("ramda");
+const { compose, curry, isNil, not, nth, slice, flip, indexOf, } = require("ramda");
 
 // addProp :: {a: b} -> a -> c -> {a: b, a: c}
 const addProp = curry((obj, key, value) =>
@@ -27,11 +27,26 @@ const id = a => a;
 // getOrElseNull :: Folktale/Result a -> ?(a)
 const getOrElseNull = a => a.getOrElse(null);
 
+const getLastEl = nth(-1);
+
+const getFirstToSecondLastEls = slice(0, -1);
+
+const popLastEl = x => [getFirstToSecondLastEls(x), getLastEl(x)];
+
+const isNotNil = compose(not, isNil);
+
+const indexIn = flip(indexOf);
+
 module.exports = {
     addProp,
     appendProp,
     either,
     toNull,
     id,
-    getOrElseNull
+    getOrElseNull,
+    getLastEl,
+    getFirstToSecondLastEls,
+    popLastEl,
+    isNotNil,
+    indexIn
 };
