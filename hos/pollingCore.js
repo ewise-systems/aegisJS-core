@@ -1,5 +1,5 @@
 const { curry, equals, nth } = require("ramda");
-const { timer, throwError, interval , of} = require("rxjs");
+const { timer, throwError , of} = require("rxjs");
 const { expand, bufferCount, take, takeWhile, retryWhen, mergeMap, filter, map, flatMap, catchError, delay } = require("rxjs/operators");
 
 // kickstart$ :: (a -> boolean) -> (_ -> Stream x) -> (_ -> Stream x) -> Stream x
