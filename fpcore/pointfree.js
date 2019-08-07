@@ -13,28 +13,30 @@ const appendProp = curry((key, value, obj) =>
 // either :: (a -> c) -> (b -> c) -> Either a b -> c
 const either = curry((f, g, e) =>
     e.matchWith({
-        Error: x => console.log(101, x) || f(x),
-        Ok: x => console.log(102, x) || g(x)
+        Error: x => f(x),
+        Ok: x => g(x)
     })
 );
 
 // toNull :: _ -> null
 const toNull = _ => null;
 
-// id :: a -> a
-const id = a => a;
-
 // getOrElseNull :: Folktale/Result a -> ?(a)
 const getOrElseNull = a => a.getOrElse(null);
 
+// getLastEl :: [a] -> a
 const getLastEl = nth(-1);
 
+// getFirstToSecondLastEls :: [a] -> [a]
 const getFirstToSecondLastEls = slice(0, -1);
 
+// popLastEl :: [a] -> [[a], a]
 const popLastEl = x => [getFirstToSecondLastEls(x), getLastEl(x)];
 
+// isNotNil :: a -> Boolean
 const isNotNil = compose(not, isNil);
 
+// indexIn :: [a] -> a -> Number
 const indexIn = flip(indexOf);
 
 module.exports = {
@@ -42,7 +44,6 @@ module.exports = {
     appendProp,
     either,
     toNull,
-    id,
     getOrElseNull,
     getLastEl,
     getFirstToSecondLastEls,
