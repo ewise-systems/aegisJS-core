@@ -1,4 +1,5 @@
 const { BehaviorSubject } = require("rxjs");
+const { task } = require("folktale/concurrency/task");
 const { compose, curry, equals, identity, prop, pipe } = require("ramda");
 const { popLastEl, indexIn } = require("../fpcore/pointfree");
 const { taskToObservable, streamToTask } = require("../frpcore/transforms");
@@ -19,15 +20,14 @@ const createRecursivePollStream = stopStreamCondition => (args = {}) => {
     const subject$ = new BehaviorSubject({ processId: null });
     const initialStreamFactory = compose(afterStart, taskToObservable, start);
     const pollingStreamFactory = compose(afterCheck, taskToObservable, check);
-    const stream$ = createRecursivePollWithRetryStream(
+
+    const unsafeStartExec = () => createRecursivePollWithRetryStream(
         retryLimit,
         retryDelay,
         stopStreamCondition,
         initialStreamFactory,
         pollingStreamFactory
-    );
-
-    const unsafeStartExec = () => stream$.subscribe(
+    ).subscribe(
         data => subject$.next(data),
         err => subject$.error(err),
         () => subject$.complete()
@@ -37,8 +37,8 @@ const createRecursivePollStream = stopStreamCondition => (args = {}) => {
 
     return {
         run: unsafeStartExec,
-        ...(resume ? {resume: unsafeResumeExec} : {}),
-        ...(stop ? {stop: unsafeStopExec} : {})
+        resume: unsafeResumeExec,
+        stop: unsafeStopExec
     };
 };
 
@@ -62,7 +62,13 @@ const createTaskFromStream = fn => (...fnArgs) => {
     const [args, startTask] = popLastEl(fnArgs);
     const taskFactory = compose(streamToTask, fn);
     const streamFactory = compose(taskToObservable, startTask);
-    return taskFactory(...args, streamFactory)();
+    return task(({reject, resolve}) =>
+        taskFactory(...args, streamFactory)().run()
+        .listen({
+            onResolved: resolve,
+            onRejected: reject
+        })
+    );
 };
 
 const createTaskFromIntervalRetryPollStream = createTaskFromStream(createIntervalPollWithRetryStream);

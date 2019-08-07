@@ -1,0 +1,9 @@
+module.exports.DEFAULT_REQUEST_TIMEOUT = 90000; //ms
+module.exports.FIVE_SECOND_REQUEST_TIMEOUT = 5000; //ms
+module.exports.ONE_SECOND_REQUEST_TIMEOUT = 1000; //ms
+module.exports.DEFAULT_RETY_LIMIT = 5;
+module.exports.DEFAULT_DELAY_BEFORE_RETRY = 5000; //ms
+module.exports.RAPID_DELAY_BEFORE_RETRY = 1000; //ms
+module.exports.DEFAULT_POLLING_INTERVAL = 1000; //ms
+module.exports.DEFAULT_AGGREGATE_WITH_TRANSACTIONS = true;
+module.exports.POSITIVE_INFINITY = Infinity;

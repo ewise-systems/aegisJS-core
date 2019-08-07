@@ -1,6 +1,6 @@
 {
   "name": "@ewise/aegisjs-core",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "Core pure functions for the open source library for interacting with eWise Systems' Aegis 2.0 architecture",
   "main": "main/index.js",
   "scripts": {
@@ -11,7 +11,6 @@
     "lint-test": "npm run lint && npm test",
     "prebuild": "npm run clean",
     "build": "npm run lint-test",
-    "start": "npm run build && node srv/testApp.js",
     "preartifice": "rimraf .nyc_output coverage mocha_test_results.xml",
     "artifice": "npm run lint-test -- -- --reporter=xunit --reporter-options output=mocha_test_results.xml && nyc report"
   },

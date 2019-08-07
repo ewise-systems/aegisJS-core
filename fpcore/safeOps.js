@@ -4,7 +4,7 @@ const Result = require("folktale/result");
 const { isWebUri } = require("valid-url");
 const { curry, split, nth, prop } = require("ramda");
 const { isString, isArray } = require("lodash");
-const { jwtSchema } = require("../constants");
+const jwtSchema = require("../constants/jwtSchema");
 
 // safeSplit :: a -> Result(Error, [a])
 const safeSplit = x => Result.try(_ =>
