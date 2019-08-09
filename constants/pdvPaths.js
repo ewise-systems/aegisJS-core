@@ -3,10 +3,17 @@ const PDV_PATHS = {
     GET_DETAILS: "/",
     RUN_BROWSER: "/public/browser",
 
+    // Auth APIs
+    REGISTER_USER: (pin = "1234567890") => `/register?pin=${pin}`,
+    LOGIN_USER: "/login",
+
     // Add a new profile
     ADD_PROFILE: "/profiles",
     GET_PROFILES: (profileId = "", cred = false) => `/profiles/${profileId}${cred ? "/credential" : ""}`,
     DELETE_PROFILE: (profileId) => `/profiles/${profileId}`,
+
+    // Get institutions
+    GET_INSTITUTIONS: (instCode = "") => `/institutions/${instCode}`,
 
     // Open a browser and login
     LOGIN_AND_ADD_PROFILE: "/profiles/login",
@@ -25,7 +32,7 @@ const PDV_PATHS = {
     GET_TRANSACTIONS: (transactionId = "", startDate = "", endDate = "", profileId = "", accountId = "") => `/transactions/${transactionId}?` + (startDate ? `&startDate=${startDate}` : "") + (endDate ? `&endDate=${endDate}` : "") + (profileId ? `&profileId=${profileId}` : "") + (accountId ? `&accountId=${accountId}` : ""),
 
     // APIs for OTA
-    GET_INSTITUTIONS: (instCode = "") => `/ota/institutions/${instCode}`,
+    GET_INSTITUTIONS_OTA: (instCode = "") => `/ota/institutions/${instCode}`,
     START_OTA: "/ota/process",
     QUERY_OTA: (pid, csrf = "") => `/ota/process/${pid}?challenge=${csrf}`,
     RESUME_OTA: (pid = "") => `/ota/process/${pid}`,

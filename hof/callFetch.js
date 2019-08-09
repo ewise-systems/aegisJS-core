@@ -13,7 +13,7 @@ const sendRequest = curry((url, method, headers, data, timeout) =>
             url, ...method, headers: { ...headers },  ...data, ...timeout
         })
         .then(compose(resolve, prop("data")))
-        .catch(compose(reject, prop("status"), prop("response")))
+        .catch(compose(reject, prop("response")))
     )
 );
 
