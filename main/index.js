@@ -9,7 +9,13 @@ const {
     createIntervalPollStream
 } = require("../hos/pollingCore");
 
-const createRecursivePollStream = stopStreamCondition => (args = {}) => {
+const isStateNotTerminal = (...terminalStates) => pipe(
+    prop("status"),
+    indexIn(terminalStates),
+    equals(-1)
+);
+
+const createRecursivePollStream = (...terminalStates) => (args = {}) => {
     const {
         retryLimit, retryDelay,
         start, afterStart = identity,
@@ -18,6 +24,7 @@ const createRecursivePollStream = stopStreamCondition => (args = {}) => {
     } = args;
 
     const subject$ = new BehaviorSubject({ processId: null });
+    const stopStreamCondition = isStateNotTerminal(...terminalStates);
     const initialStreamFactory = compose(afterStart, taskToObservable, start);
     const pollingStreamFactory = compose(afterCheck, taskToObservable, check);
 
@@ -42,22 +49,6 @@ const createRecursivePollStream = stopStreamCondition => (args = {}) => {
     };
 };
 
-const createRecursivePDVPollStream = createRecursivePollStream(
-    pipe(
-        prop("status"),
-        indexIn(["error", "partial", "stopped", "done"]),
-        equals(-1)
-    )
-);
-
-const createRecursiveDownloadPollStream = createRecursivePollStream(
-    pipe(
-        prop("status"),
-        indexIn(["FAILED", "READY"]),
-        equals(-1)
-    )
-);
-
 const createTaskFromStream = fn => (...fnArgs) => {
     const [args, startTask] = popLastEl(fnArgs);
     const taskFactory = compose(streamToTask, fn);
@@ -76,9 +67,8 @@ const createTaskFromIntervalRetryPollStream = createTaskFromStream(createInterva
 const createTaskFromIntervalPollStream = createTaskFromStream(createIntervalPollStream);
 
 module.exports = {
+    isStateNotTerminal,
     createRecursivePollStream,
-    createRecursivePDVPollStream,
-    createRecursiveDownloadPollStream,
     createTaskFromStream,
     createTaskFromIntervalRetryPollStream,
     createTaskFromIntervalPollStream
