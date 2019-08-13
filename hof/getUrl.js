@@ -8,7 +8,7 @@ const { getOrElseNull } = require("../fpcore/pointfree");
 // getUrl :: Path string -> (JWT string | URI string) -> URI string
 const getUrl = curry((path, urlOrJwt) =>
     !urlOrJwt ?
-    rejected("JWT was not provided.") :
+    rejected({ code: 401 }) :
     safeIsWebUri(urlOrJwt)
     .matchWith({
         Error: _ => getUrlFromJWT(urlOrJwt),
@@ -24,7 +24,7 @@ const getUrl = curry((path, urlOrJwt) =>
         )
     })
     .matchWith({
-        Error: _ => rejected("JWT is invalid. Check the schema or aegis url."),
+        Error: _ => rejected({ code: 401 }),
         Ok: identity
     })
 );
