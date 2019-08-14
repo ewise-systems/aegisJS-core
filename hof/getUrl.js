@@ -7,8 +7,6 @@ const { getOrElseNull } = require("../fpcore/pointfree");
 
 // getUrl :: Path string -> (JWT string | URI string) -> URI string
 const getUrl = curry((path, urlOrJwt) =>
-    !urlOrJwt ?
-    rejected({ code: 401 }) :
     safeIsWebUri(urlOrJwt)
     .matchWith({
         Error: _ => getUrlFromJWT(urlOrJwt),
