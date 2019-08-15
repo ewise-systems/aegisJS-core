@@ -1,4 +1,4 @@
-const { curry } = require("ramda");
+const { curry, equals } = require("ramda");
 const { timer, throwError , of} = require("rxjs");
 const { expand, distinctUntilChanged, take, takeWhile, retryWhen, mergeMap, flatMap, catchError } = require("rxjs/operators");
 
@@ -8,7 +8,7 @@ const createRecursivePollWithRetryStream = curry((retryLimit, retryDelay, pred, 
     .pipe(
         take(1),
         expand(({processId: pid}) => hStream(pid)),
-        distinctUntilChanged(),
+        distinctUntilChanged((a,b) => equals(a, b)),
         retryWhen(err$ =>
             err$.pipe(
                 mergeMap((err, i) =>
